@@ -18,7 +18,7 @@ const Tmpsurvey = [
             type : 'text',
             question : 'what is your name ?',
             description : 'description question 1',
-            data : null,
+            data : {},
          },
          {
             id : 2,
@@ -75,6 +75,7 @@ const Tmpsurvey = [
       created_at : '2023-01-01',
       updated_at : '2023-01-01',
       expire_at : '2023-12-31',
+      questions : []
    },
    {
       id : 3,
@@ -86,6 +87,8 @@ const Tmpsurvey = [
       created_at : '2023-01-01',
       updated_at : '2023-01-01',
       expire_at : '2023-12-31',
+      questions : []
+
    },
    {
       id : 4,
@@ -97,6 +100,8 @@ const Tmpsurvey = [
       created_at : '2023-01-01',
       updated_at : '2023-01-01',
       expire_at : '2023-12-31',
+      questions : []
+
    }
 ]
 
@@ -106,7 +111,8 @@ const Tmpsurvey = [
          data: { name : 'mohammed' , id : 1 },
          token: '1'
       },
-      surveys : [...Tmpsurvey]
+      surveys : [...Tmpsurvey],
+      typequestion : ['text' , 'select' , 'checkbox' , 'radio' , 'textarea' ]
    },
    getters: {},
    actions: {},
