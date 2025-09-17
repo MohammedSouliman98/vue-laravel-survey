@@ -108,18 +108,39 @@ const Tmpsurvey = [
  const store = createStore({
    state: {
       user: {
-         data: { name : 'mohammed' , id : 1 },
-         token: '1'
+         data: {  },
+         token: sessionStorage.getItem('token') || null
       },
       surveys : [...Tmpsurvey],
       typequestion : ['text' , 'select' , 'checkbox' , 'radio' , 'textarea' ]
    },
    getters: {},
-   actions: {},
+   actions: {
+      register({commit}, user){
+         return fetch('http://localhost:8000/api/register' , {
+            headers : { 
+               'Content-Type' : 'application/json',
+               'Accept' : 'application/json'
+            },
+            method : 'POST',
+            body : JSON.stringify(user)
+         })
+         .then(res=>res.json())
+         .then(res=>{
+            commit('setUser' , res) ;
+            return res ;
+         })
+      }
+   },
    mutations: {
       logout : state=>{
          state.user.token = null , 
          state.user.data = {}
+      },
+      setUser : (state, userdata) => {
+         state.user.token = userdata.token ; 
+         state.user.data = userdata.user ;
+         sessionStorage.setItem('token' , userdata.token);
       }
    },
    modules: {},
