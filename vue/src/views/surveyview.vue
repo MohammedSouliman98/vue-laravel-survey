@@ -157,7 +157,7 @@ function addquestion(index) {
     data: {},
   };
   // console.log("the index of this element you clicked on is " , index);
-  model.value.questions.splice(2 , 0, newquestion);
+  model.value.questions.splice(index , 0, newquestion);
 
   }
 
