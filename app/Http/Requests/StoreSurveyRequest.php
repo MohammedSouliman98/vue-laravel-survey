@@ -11,7 +11,7 @@ class StoreSurveyRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,12 @@ class StoreSurveyRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
-        ];
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            // 'user_id' => 'required|exists:users,id',
+            'status' => 'required|boolean',
+            'expire_at' => 'nullable|date|after:today',
+            'questions' => 'array',
+         ];
     }
 }

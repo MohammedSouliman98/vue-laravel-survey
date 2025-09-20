@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('title',1000);
             $table->string('slug',1000);
             $table->longText('description');
-            $table->tinyInteger('status');
+            $table->boolean('status');
             $table->timestamp('expire_date');  
             $table->timestamps();
         });

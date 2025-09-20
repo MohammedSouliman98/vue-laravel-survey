@@ -1,6 +1,6 @@
 <template>
   <div class="">
-      <main class="flex-1 p-6">
+      <main class="flex justify-between p-6 shadow-lg rounded-lg bg-white mb-4">
         <slot name="header"></slot>
       </main>
       <header class="mx-5 ">

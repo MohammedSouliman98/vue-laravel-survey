@@ -32,7 +32,6 @@
 <script setup>
 import store from '../store';
 import { useRouter } from 'vue-router';
-import Dashboard from './Dashboard.vue';
 
 
 const router = useRouter();

@@ -1,11 +1,14 @@
 <template>
-  <pagecomponent class="lg:w-[60%] lg:mx-auto">
+  <div>
+    <h1 v-if="loadingsurvey" class="text-center font-bold text-2xl">...Loading</h1>
+  <pagecomponent v-else class="lg:w-[60%] lg:mx-auto">
     <template v-slot:header>
       <h1 class="font-bold text-2xl">
-        {{ model.id ? model.title : "Create A New Survey" }}
+        {{ route.params.id ? model.title : "Create A New Survey" }}
       </h1>
+      <button v-if="route.params.id" @click="deletesurvey()" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 cursor-pointer">Delete survey</button>
     </template>
-    <form action="" @submit.prevent="">
+    <form  @submit.prevent="SaveSurvey">
       <!-- Survey Field   -->
       <div class="image rounded-2xl">
         <label for="image">Image</label>
@@ -15,7 +18,7 @@
             :src="model.image"
             alt=""
             id="image"
-            class="w-32 h-32 rounded-full bg-red-500 object-cover rounded-2xl"
+            class="w-32 h-32 rounded-full bg-red-500 object-cover"
           />
           <div
             class="w-32 h-32 rounded-full flex justify-center items-center"
@@ -91,26 +94,38 @@
             class="w-5 h-5"
             v-model="model.status"
           />
-          <label for="status" class="mr-5">Status</label>
+          <label for="status"  class="mr-5">Status</label>
         </div>
       </div>
 
-      <div class="mb-5 ">
-         <div class="flex justify-between items-center">
-            <h2 class="text-xl font-semibold mb-4">Questions</h2>
-         </div>
-         <div v-if="!model.questions.length" class="flex justify-center">
-            <p>you don't have any question yet , would Add Questions ??</p>
-         </div>
-         <div v-else v-for="(question , index) in model.questions" :key="question.index">
-            <QuestionsEditor 
+      <div class="mb-5">
+        <div class="flex justify-between items-center">
+          <h2 class="text-xl font-semibold mb-4">Questions</h2>
+          <button
+            v-if="!model.questions.length"
+            @click="addquestion"
+            class="text-xl font-bold bg-blue-500 text-white rounded px-4 py-2 ml-1 cursor-pointer"
+          >
+            Add Question
+          </button>
+        </div>
+        <div v-if="!model.questions.length" class="flex justify-center">
+          <p>you don't have any question yet , would Add Questions ??</p>
+        </div>
+        <div
+          v-else
+          v-for="(question, index) in model.questions"
+          :key="question.id"
+        >
+        {{ model }}
+          <QuestionsEditor
             :question="question"
             :index="index"
             @change="questionchange"
             @addquestion="addquestion"
             @deletequestion="deletequestion"
-            />
-         </div>
+          />
+        </div>
       </div>
 
       <!-- save button -->
@@ -125,52 +140,86 @@
       </div>
     </form>
   </pagecomponent>
+  </div>
 </template>
 
 <script setup>
 import pagecomponent from "../components/pagecomponent.vue";
 import QuestionsEditor from "../components/QuestionsEditor.vue";
 import { v4 as uuidv4 } from "uuid";
-import { ref } from "vue";
-import store from "../store/index.js";
+import { computed, ref, watch } from "vue";
+// import { useStore } from "vuex";
+import store from "../store";
 import { useRoute } from "vue-router";
 
 const route = useRoute();
+// const store = useStore();
+// const router = useRoute();
 
 let model = ref({
   title: "",
-  status: "false",
+  status: false,
   description: "",
   image: "",
   expire_at: "",
   questions: [],
 });
+
+const loadingsurvey = computed(() => store.state.currentsurvey.loading);
+
+watch(
+  () => store.state.currentsurvey.data, 
+  (newVal) => {
+    model.value = JSON.parse(JSON.stringify(newVal));
+    console.log('the new value is ' , newVal)
+  }
+)
+
 if (route.params.id) {
-  model.value = store.state.surveys.find((s) => s.id == route.params.id);
+  // model.value = store.state.surveys.find((s) => s.id == route.params.id);
+  store.dispatch("getsurvey" , route.params.id);
 }
-function addquestion(index) {
-  const newquestion = { 
-    id : uuidv4(),
-    type : 'textarea',
-    question : '',
-    description : null,
+function addquestion(i) {
+  const newquestion = {
+    id: uuidv4(),
+    type: "textarea",
+    question: "",
+    description: null,
     data: {},
   };
-  // console.log("the index of this element you clicked on is " , index);
-  model.value.questions.splice(index , 0, newquestion);
+  // console.log("the index of this element you clicked on is ", i);
+  // console.log("the model questions is ", model.value.questions);
+  model.value.questions.splice(i, 0, newquestion);
+}
 
+function deletequestion(question) {
+  model.value.questions = model.value.questions.filter(
+    (q) => q.id !== question.id
+  );
+}
+
+function questionchange(question) {
+  model.value.questions = model.value.questions.map((q) =>
+    q.id === question.id ? JSON.parse(JSON.stringify(question)) : q
+  );
+}
+
+function SaveSurvey() {
+  store.dispatch('savesurvey' , model.value).then((data) => {
+    route.push({
+      name : "viewsurvey",
+      params : { id : data.data.id }
+    })
+  })
+}
+
+function deletesurvey(){
+  if(confirm("Are you sure you want to delete this survey ?")){
+    store.dispatch('deletesurvey' , model.value.id).then(() => {
+      route.push({ name :"Surveys"})
+    })
   }
-
-
-  function deletequestion(question) {
-    model.value.questions = model.value.questions.filter((q) => q.id !== question.id);
-  }
-
-  function questionchange(question){
-    model.value.questions = model.value.questions.map(
-      (q) => (q.id === question.id ? JSON.parse(JSON.stringify(question)) : q)
-    )
-  }
+}
 </script>
 
 <style>

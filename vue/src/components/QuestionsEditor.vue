@@ -22,8 +22,8 @@
         <label :for="'input' + model.id">Questions Text</label>
         <input
           type="text"
-          @change="datachange"
           v-model="model.question"
+          @keyup ="emit('change' , model)"
           placeholder="Enter your question"
           :id="'input' + model.id"
           class="mt-1 p-2 block w-full border-gray-300 rounded-md shadow-sm outline-0 mb-4"
@@ -35,10 +35,10 @@
           name="type"
           :id="'input' + model.id"
           v-model="model.type"
-          @change="datachange"
+          @keyup ="emit('change' , model)"
           class="mt-1 p-2 block w-full border-gray-300 rounded-md shadow-sm outline-0 mb-4"
         >
-          <option :value="type" v-for="type in typequestion" :key="type">
+          <option :value="type" v-for="type in typequestion" @click="datachange" :key="type">
             {{ type }}
           </option>
         </select>
@@ -49,6 +49,7 @@
       name="description"
       :id="'description' + model.id"
       v-model="model.description"
+      @keyup ="emit('change' , model)"
       class="w-full border-gray-300 rounded-md shadow-sm outline-0 p-2"
       cols="30"
       rows="4"
@@ -69,12 +70,12 @@
         <div class="font-bold text-2xl">this is no potions here</div>
       </div>
       <div v-else>
-        <div v-for="option in model.data.options" :key="option.uuid" class="flex justify-between m-2">
+        <div v-for="(option , index) in model.data.options" :key="option.uuid" class="flex justify-between m-2">
           <input
             type="text"
             v-model="option.text"
-            @change="datachange"
-            placeholder="option 1"
+            @keyup ="emit('change' , model)"
+            :placeholder='"option " +`${ index + 1}`'
             class="mt-1 p-2 block w-full border-gray-300 rounded-md shadow-sm outline-0 mb-1"
           />
           <button
@@ -134,8 +135,7 @@ const data = JSON.parse(JSON.stringify(model.value))
  if(!checkifhasoptions()){
   delete data.data.options
  }
-  emit("change" , data)
-  console.log('change')
+ emit('change' , model);
 }
 
 function addquestion (){
