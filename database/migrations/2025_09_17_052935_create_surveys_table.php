@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('surveys', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('title',1000);
             $table->string('slug',1000);
             $table->longText('description');
             $table->boolean('status');
-            $table->timestamp('expire_date');  
+            $table->timestamp('expire_at');  
             $table->timestamps();
         });
     }

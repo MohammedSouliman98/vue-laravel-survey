@@ -171,7 +171,7 @@ watch(
   () => store.state.currentsurvey.data, 
   (newVal) => {
     model.value = JSON.parse(JSON.stringify(newVal));
-    console.log('the new value is ' , newVal)
+    // console.log('the new value is ' , newVal)
   }
 )
 
@@ -206,9 +206,9 @@ function questionchange(question) {
 
 function SaveSurvey() {
   store.dispatch('savesurvey' , model.value).then((data) => {
+    console.log(data)
     route.push({
-      name : "Surveys",
-      params : { id : data.data.id }
+      name : "SurveyView" , params : { id : data.data.id  }
     })
   })
 }

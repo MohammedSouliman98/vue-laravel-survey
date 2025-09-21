@@ -132,7 +132,7 @@ const store = createStore({
             commit('setsurveyloading' , true);
             return axiosClient.get(`/survey/${id}`).then((res) => {
                 commit("setsurveyloading" , false);
-                console.log(res.data);
+                // console.log(res.data);
                 commit("setsurveydata" , res.data);
                 return res;
             })
@@ -147,11 +147,11 @@ const store = createStore({
             if (survey.id) {
                 response = axiosClient
                     .put(`/survey/${survey.id}`, survey)
-                    .then((res) => commit(updatesurvey, res.data));
+                    .then((res) => commit('updatesurvey', res.data));
                     return res;
             } else {
                response = axiosClient.post("/survey", survey).then((res) => {
-                  commit("addsurvey" , res.data);
+                  commit('addsurvey' , res.data);
                   return res;
                });
             }
@@ -189,7 +189,8 @@ const store = createStore({
         updatesurvey : (state , survey) =>{ 
             state.surveys = state.surveys.map(s => {
                 if( s.id === survey.data.id){
-                return survey.data;
+                    console.log(survey.data);
+                    return survey.data;
                 }
                 return s;
             })
@@ -201,8 +202,8 @@ const store = createStore({
             state.user.token = userdata.data.token;
             state.user.data = userdata.data.user;
             sessionStorage.setItem('token' , userdata.data.token);
-            console.log(userdata.data.token);
-            console.log(state.user.token);
+            // console.log(userdata.data.token);
+            // console.log(state.user.token);
         },
     },
     modules: {},

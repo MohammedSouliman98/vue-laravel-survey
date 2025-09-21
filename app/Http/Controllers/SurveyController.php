@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Survey;
 use Illuminate\Http\Request;
+use App\Models\SurveyQuestion;
 use App\Http\Resources\Surveyresource;
 use App\Http\Requests\StoreSurveyRequest;
-use App\Http\Requests\UpdateSurveyRequest;
 
+use Illuminate\Support\Facades\Validator;
 
 class SurveyController extends Controller
 {
@@ -27,17 +28,16 @@ class SurveyController extends Controller
      */
     public function store(StoreSurveyRequest $request)
     {
-        $data = $request->validated();
+        $data = $request->validated() ;
         
         $survey = Survey::create($data);
 
-        // foreach ( $data['questions'] as $question){
-        //     $question['survey_id'] = $survey->id;
-        //     $this->createQuestion($question);
-        // }
-        // return new Surveyresource($survey);
+        foreach ( $data['questions'] as $question){
+            $question['survey_id'] = $survey->id;
+            $this->createQuestion($question);
+        }
+        return new Surveyresource($survey);
 
-        return  $data;
         
     }
 
@@ -47,9 +47,9 @@ class SurveyController extends Controller
     public function show(Survey $survey, Request $request)
     {
         $user = $request->user();
-        // if($user->id !== $survey->user_id){
-        //     return response()->json(['message' => 'Unauthorized'], 403);
-        // }
+        if($user->id !== $survey->user_id){
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
         return new Surveyresource($survey);
     }
 
@@ -75,23 +75,20 @@ class SurveyController extends Controller
         return response()->json(['message' => 'Survey deleted successfully']);
     }
 
-    // private function createQuestion(array $data){
-    //     $question = $survey->questions()->create([
-    //         'survey_id' => $data['survey_id'],
-    //         'question' => $data['question'],
-    //         'type' => $data['type'],
-    //         'description' => $data['description'] ?? null,
-    //         'is_required' => $data['is_required'] ?? false,
-    //     ]);
+    private function createQuestion($data){
+        
 
-    //     if(in_array($data['type'], ['radio', 'checkbox', 'select']) && isset($data['options'])){
-    //         foreach($data['options'] as $option){
-    //             $question->options()->create([
-    //                 'question_id' => $question->id,
-    //                 'option' => $option,
-    //             ]);
-    //         }
-    //     }
-    //     return $question;
-    // }
+        if(is_array($data['data'])){
+            $data['data'] = json_encode($data['data']);
+        }
+        $validator = Validator::make($data, [
+            'survey_id' => 'required|exists:surveys,id',
+            'question' => 'required|string|max:255',
+            'type' => 'required|in:text,select,radio,checkbox,textarea',
+            'data' => 'nullable|string',
+            'description' => 'nullable|string',
+        ]);
+
+        return SurveyQuestion::create($validator->validated());
+    }
 }

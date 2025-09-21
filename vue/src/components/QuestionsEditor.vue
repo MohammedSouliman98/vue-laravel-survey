@@ -108,6 +108,7 @@ const typequestion = store.state.typequestion;
 
 let model = ref(JSON.parse(JSON.stringify(props.question)));
 
+
 function checkifhasoptions() {
   return ["select", "checkbox", "radio"].includes(model.value.type);
 }
@@ -117,11 +118,12 @@ function getoptions(){
 function setoptions(options){
   model.value.data.options = options
 }
-function addoption(){
+function addoption(e){
+  e.preventDefault()
   setoptions([
     ...getoptions(),
     {uuid : uuidv4() , text : ""},
-  ])
+  ]);
   datachange()
 }
 function deleteoption(option){
@@ -132,13 +134,15 @@ function deleteoption(option){
 
 function datachange(){
 const data = JSON.parse(JSON.stringify(model.value))
+console.log(data)
  if(!checkifhasoptions()){
   delete data.data.options
  }
- emit('change' , model);
+ emit('change' , data);
 }
-
-function addquestion (){
+// console.log(model.value.data)
+function addquestion (e){
+  e.preventDefault()
   emit("addquestion" ,  props.index + 1  )
 }
 
