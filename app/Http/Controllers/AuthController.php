@@ -15,7 +15,7 @@ class AuthController extends Controller
             'email' => 'required|string|email|max:255|unique:users',    
             'password' => 'required|min:8|confirmed',
         ]);
-/*   @var \App\Model\User $user  */
+/**  @var \App\Model\User $user  */
 
         $user = User::create([
             'name' => $data['name'],
@@ -33,22 +33,23 @@ class AuthController extends Controller
 
     }
     public function login(Request $request) {
+
         $data = $request->validate([
-            'email' => 'required|string|email',
+            'email' => 'required|string|email|exists:users,email',
             'password' => 'required|string'
         ]);
 
-        $user = User::where('email', $data['email'])->first();
 
-        if (!$user || !Hash::check($data['password'], $user->password)) {
+        if(!Auth::attempt($data)) {
             return response([
-                'message' => 'The provided credentials are incorrect.'
-            ], 401);
+                'message' => 'The provided credentials are incorrect'
+            ], 422);
         }
 
-        $token =  $user->createToken($user->id)->plainTextToken; 
+        $user =  Auth::user();
 
-          Auth::Login($user);
+        $token =  $user->createToken('main')->plainTextToken; 
+
 
         return response([
             'user' => $user, 
@@ -57,6 +58,12 @@ class AuthController extends Controller
     }
 
     public function logout(Request $request) {
+
+        $user = Auth::user();
+        $user->currentAccessToken()->delete();
+        return response([
+            'message' => 'Logged out'
+        ]);
 
     }
 }

@@ -16,9 +16,8 @@ class SurveyController extends Controller
      */
     public function index(Request $request)
     {
-        // $user = $request->user();
-        $user = 2;
-        return Surveyresource::collection(Survey::where('user_id', $user)->paginate(10));
+        $user = $request->user();
+        return Surveyresource::collection(Survey::where('user_id', $user->id)->paginate(10));
 
     }
     
@@ -29,13 +28,16 @@ class SurveyController extends Controller
     public function store(StoreSurveyRequest $request)
     {
         $data = $request->validated();
+        
         $survey = Survey::create($data);
 
         // foreach ( $data['questions'] as $question){
         //     $question['survey_id'] = $survey->id;
         //     $this->createQuestion($question);
         // }
-        return new Surveyresource($survey);
+        // return new Surveyresource($survey);
+
+        return  $data;
         
     }
 
@@ -45,9 +47,9 @@ class SurveyController extends Controller
     public function show(Survey $survey, Request $request)
     {
         $user = $request->user();
-        // // if($user->id !== $survey->user_id){
-        // //     return response()->json(['message' => 'Unauthorized'], 403);
-        // // }
+        // if($user->id !== $survey->user_id){
+        //     return response()->json(['message' => 'Unauthorized'], 403);
+        // }
         return new Surveyresource($survey);
     }
 
@@ -73,23 +75,23 @@ class SurveyController extends Controller
         return response()->json(['message' => 'Survey deleted successfully']);
     }
 
-    private function createQuestion(array $data){
-        $question = $survey->questions()->create([
-            'survey_id' => $data['survey_id'],
-            'question' => $data['question'],
-            'type' => $data['type'],
-            'description' => $data['description'] ?? null,
-            'is_required' => $data['is_required'] ?? false,
-        ]);
+    // private function createQuestion(array $data){
+    //     $question = $survey->questions()->create([
+    //         'survey_id' => $data['survey_id'],
+    //         'question' => $data['question'],
+    //         'type' => $data['type'],
+    //         'description' => $data['description'] ?? null,
+    //         'is_required' => $data['is_required'] ?? false,
+    //     ]);
 
-        if(in_array($data['type'], ['radio', 'checkbox', 'select']) && isset($data['options'])){
-            foreach($data['options'] as $option){
-                $question->options()->create([
-                    'question_id' => $question->id,
-                    'option' => $option,
-                ]);
-            }
-        }
-        return $question;
-    }
+    //     if(in_array($data['type'], ['radio', 'checkbox', 'select']) && isset($data['options'])){
+    //         foreach($data['options'] as $option){
+    //             $question->options()->create([
+    //                 'question_id' => $question->id,
+    //                 'option' => $option,
+    //             ]);
+    //         }
+    //     }
+    //     return $question;
+    // }
 }

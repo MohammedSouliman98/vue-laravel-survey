@@ -35,7 +35,7 @@ const survey = computed(() => props.survey);
 function deletesurvey(id) {
   if (confirm("Are you sure you want to delete this survey?")) {
     store.dispatch("deletesurvey", id).then(() => {
-      router.push({ name: "Dashboard" });
+      router.push({ name: "Surveys" });
     });
   }
 }

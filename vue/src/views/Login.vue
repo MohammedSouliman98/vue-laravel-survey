@@ -2,6 +2,7 @@
   <div class="">
     <h2 class="text-xl font-semibold mb-4">Login</h2>
       <form @submit="login">
+        <p v-if="errmessage" class="text-red-500 mb-4">{{ errmessage }}</p>
         <div class="mb-4">
           <label for="Email"  class="block text-sm font-medium text-gray-700">Email</label>
           <input type="Email" id="Email" v-model="user.email" placeholder="Enter your Email" class="mt-1 p-2 block w-full border-gray-300 rounded-md shadow-sm outline-0">
@@ -19,10 +20,11 @@
 </template>
 
 <script setup>
+import { ref } from 'vue';
 import store from '../store';
 import { useRouter } from 'vue-router';
 
-
+let errmessage = ref('');
 const router = useRouter();
 
 const user = {
@@ -34,9 +36,11 @@ function login(e) {
 e.preventDefault();
 store.dispatch('login', user).then(
   () => {
-    router.push({name : "Dashboard"})
+    router.push('/dashboard');
   }
-);
+).catch((err)=>{
+  errmessage.value = err.response.data.message;
+});
 }
 
 </script>

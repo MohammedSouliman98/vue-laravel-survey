@@ -207,7 +207,7 @@ function questionchange(question) {
 function SaveSurvey() {
   store.dispatch('savesurvey' , model.value).then((data) => {
     route.push({
-      name : "viewsurvey",
+      name : "Surveys",
       params : { id : data.data.id }
     })
   })

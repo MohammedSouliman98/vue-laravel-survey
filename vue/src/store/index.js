@@ -107,7 +107,7 @@ const store = createStore({
     state: {
         user: {
             data: {},
-            token: sessionStorage.getItem("token") || null,
+            token: sessionStorage.getItem('token'),
         },
         currentsurvey : {
             loading : false , 
@@ -198,9 +198,11 @@ const store = createStore({
             (state.user.token = sessionStorage.clear()), (state.user.data = {});
         },
         setUser: (state, userdata) => {
-            state.user.token = userdata.token;
-            state.user.data = userdata.user;
-            sessionStorage.setItem("token", userdata.token);
+            state.user.token = userdata.data.token;
+            state.user.data = userdata.data.user;
+            sessionStorage.setItem('token' , userdata.data.token);
+            console.log(userdata.data.token);
+            console.log(state.user.token);
         },
     },
     modules: {},

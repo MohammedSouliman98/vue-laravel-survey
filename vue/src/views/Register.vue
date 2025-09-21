@@ -47,7 +47,7 @@ function register(e) {
 e.preventDefault();
 store.dispatch('register', user).then(
   () => {
-    router.push({name : "Dashboard"})
+    router.push('/dashboard');
   }
 );
 }
