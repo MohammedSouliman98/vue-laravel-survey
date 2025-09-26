@@ -45,6 +45,7 @@
             change
             <input
               type="file"
+              @change="onfilechange"
               class="absolute top-0 right-0 left-0 bottom-0 opacity-0 cursor-pointer"
             />
           </button>
@@ -117,7 +118,7 @@
           v-for="(question, index) in model.questions"
           :key="question.id"
         >
-        {{ model }}
+        {{ question }}
           <QuestionsEditor
             :question="question"
             :index="index"
@@ -156,6 +157,7 @@ const route = useRoute();
 // const store = useStore();
 // const router = useRoute();
 
+
 let model = ref({
   title: "",
   status: false,
@@ -164,7 +166,6 @@ let model = ref({
   expire_at: "",
   questions: [],
 });
-
 const loadingsurvey = computed(() => store.state.currentsurvey.loading);
 
 watch(
@@ -179,10 +180,24 @@ if (route.params.id) {
   // model.value = store.state.surveys.find((s) => s.id == route.params.id);
   store.dispatch("getsurvey" , route.params.id);
 }
+function onfilechange(e){
+  const file = e.target.files[0];
+
+  const reader = new FileReader();
+
+  reader.onload = () => {
+    model.value.image = reader.result;
+    model.value.imageUrl = reader.result;
+  }
+
+  reader.readAsDataURL(file);
+
+}
+
 function addquestion(i) {
   const newquestion = {
     id: uuidv4(),
-    type: "textarea",
+    type: "text",
     question: "",
     description: null,
     data: {},
@@ -205,6 +220,7 @@ function questionchange(question) {
 }
 
 function SaveSurvey() {
+  console.log(model.value)
   store.dispatch('savesurvey' , model.value).then((data) => {
     console.log(data)
     route.push({

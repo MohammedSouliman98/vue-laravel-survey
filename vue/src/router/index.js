@@ -2,8 +2,15 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
 import store from '../store'
+import SurveyPublicViewer from '../views/SurveyPublicViewer.vue'
+
 
 const routes = [
+   {
+      path : '/view/survey/:slug',
+      name : SurveyPublicViewer ,
+      component: SurveyPublicViewer
+   },
    {
       path: '/',
       redirect: '/dashboard',

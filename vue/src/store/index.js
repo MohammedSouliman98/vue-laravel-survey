@@ -1,6 +1,7 @@
 import { createStore } from "vuex";
 import axiosClient from "../axios.js";
 import axios from "axios";
+import Dashboard from "../views/Dashboard.vue";
 
 const Tmpsurvey = [
     {
@@ -113,6 +114,10 @@ const store = createStore({
             loading : false , 
             data : {}
         },
+        Dashboard : {
+            loading : false,
+            data : {}
+        },
         surveys: [],
         typequestion: ["text", "select", "checkbox", "radio", "textarea"],
     },
@@ -142,7 +147,32 @@ const store = createStore({
                 throw err;
             });
         },
+        getSurveyBySlug({commit} , slug){
+            commit('setsurveyloading', true);
+            return axiosClient.get(`/survey-by-slug/${slug}`).then((res)=>{
+                commit('setsurveydata', res.data);
+                commit('setsurveyloading', false);
+            }).catch((err)=> {
+                commit('setsurveyloading', false);
+                throw err;
+            })
+        },
+        getDashboardDate({commit}){
+            commit('setDashboardloading' , true);
+            return axiosClient.get('Dashboard').then((res)=>{
+                commit('setDashboardloading' , false);
+                commit('setDashboardData', res.data);
+            }).catch((err)=> {
+                commit('setDashboardloading' , false);
+                return err;
+            })
+        },
+        saveSurveyAnswer({commit} ,{surveyId , answers} ){
+            console.log(answers)
+            return axiosClient.post(`/survey/${surveyId}/answer`,{answers})
+        },
         savesurvey({ commit }, survey) {
+            delete survey.imageUrl; 
             let response;
             if (survey.id) {
                 response = axiosClient
@@ -174,6 +204,12 @@ const store = createStore({
         },
     },
     mutations: {
+        setDashboardloading: (state , loading) =>{
+            state.Dashboard.loading = loading;
+        },
+        setDashboardData: (state , DashboardData) => {
+            state.Dashboard.data = DashboardData;
+        },
         setsurveyloading : (state , loading) => {
             state.currentsurvey.loading = loading ; 
         },

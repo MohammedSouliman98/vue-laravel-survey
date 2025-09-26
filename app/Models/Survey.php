@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\SurveyAnswer;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 use Illuminate\Database\Eloquent\Model;
@@ -14,6 +15,7 @@ class Survey extends Model
     protected $fillable = [
         'user_id',
         'title',
+        'image',
         'slug',
         'status',
         'description',
@@ -33,5 +35,8 @@ class Survey extends Model
     }
     public function questions(){
         return $this->hasMany(SurveyQuestion::class);
+    }
+    public function answers(){
+        return $this->hasMany(SurveyAnswer::class);
     }
 }

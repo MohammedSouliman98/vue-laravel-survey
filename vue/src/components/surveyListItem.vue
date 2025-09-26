@@ -1,6 +1,6 @@
 <template>
-  <div class="flex flex-col text-center mx-5">
-    <img :src="survey.image" alt="" />
+  <div class="flex flex-col justify-between text-center mx-5">
+    <img :src="survey.image" class="w-100 h-70 overflow-hidden object-cover" alt="" />
     <h1 class="font-bold">{{ survey.title }}</h1>
     <p>{{ survey.description }}</p>
     <div class="">Data Expire At : {{ survey.expire_at }}</div>
@@ -10,6 +10,7 @@
         class="flex bg-green-500 px-6 py-2 rounded text-white cursor-pointer"
         >Edit</router-link
       >
+      <a :href="`/view/survey/${survey.slug}`" target="blank" class="flex bg-blue-500 px-6 py-2 rounded text-white cursor-pointer">show</a>
       <button
         v-if="survey.id"
         @click="deletesurvey(survey.id)"

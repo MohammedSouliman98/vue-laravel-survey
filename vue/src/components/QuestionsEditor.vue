@@ -35,7 +35,7 @@
           name="type"
           :id="'input' + model.id"
           v-model="model.type"
-          @keyup ="emit('change' , model)"
+          @change ="emit('change' , model)"
           class="mt-1 p-2 block w-full border-gray-300 rounded-md shadow-sm outline-0 mb-4"
         >
           <option :value="type" v-for="type in typequestion" @click="datachange" :key="type">
