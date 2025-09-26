@@ -1,1 +1,15 @@
 @import "tailwindcss";
+
+@theme {
+   --animate-fade-in-down: fade-in-down 0.2s ease-in-out both;
+   @keyframes fade-in-down {
+      0%  {
+      transfrom : translateY(-0.75rem);
+      opacity : 0
+     }
+     100% {
+      transfrom : translateY(0rem);
+      opacity : 1
+     }
+   }
+ }

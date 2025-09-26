@@ -11,12 +11,14 @@
         </Router-Link>
       </div>
     </template>
-    <template class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+    <template class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 
       <surveylistitem
-        v-for="survey in surveys"
+        v-for="(survey , ind) in surveys"
         :key="survey.id"
         :survey="survey"
+        class="opacity-0 animate-fade-in-down"
+        :style="{animationDelay :` ${ind * 0.2}`}"
       />
     </template>
   </Pagecomponent>

@@ -5,8 +5,8 @@
         
       </template>
     <h1 v-if="loading" class="text-center font-bold text-2xl">...Loading</h1>
-      <div v-else class="grid gird-cols-1 md:grid-cols-2 gap-3 lg:grid-cols-3 h-100">
-        <div class="shadow-md hover:shadow-2xl rounded-xl p-2 flex flex-col justify-evenly px-3">
+      <div v-else class="grid gird-cols-1 md:grid-cols-2 gap-3 lg:grid-cols-3 h-100 ">
+        <div class="shadow-md hover:shadow-2xl rounded-xl p-2 flex flex-col justify-evenly px-3 animate-fade-in-down" style="animation-delay: 0.1s;">
           <h1 class="text-2xl font-bold ">Latest Survey</h1>
           <img src="" class="h-[30%]" alt="">
           <h1 class="text-xl font-medium">{{ data.latestSurvey.title }}</h1>
@@ -35,7 +35,7 @@
             <button class="border border-gray-500 border-2  rounded-lg px-2 py-1 cursor-pointer font-medium hover:bg-gray-500 hover:text-white">view Answers</button>
           </div>
         </div>
-        <div class="shadow-md hover:shadow-2xl rounded-xl p-2 flex flex-col justify-evenly text-center">
+        <div class="shadow-md hover:shadow-2xl rounded-xl p-2 flex flex-col justify-evenly text-center  animate-fade-in-down"  style="animation-delay: 0.2s;">
           <div class="shadow-md  rounded-xl h-full content-center">
             <h1 class="text-2xl font-bold">Total Surveys</h1>
             <span class="text-7xl font-bold text-gray-500">{{ data.totalSurvey }}</span>
@@ -45,7 +45,7 @@
             <span class="text-7xl font-bold text-gray-500">{{ data.totalAnswers }}</span>
           </div>
         </div>
-        <div class="shadow-md hover:shadow-2xl rounded-xl p-2 flex flex-col justify-evenly text-center">
+        <div class="shadow-md hover:shadow-2xl rounded-xl p-2 flex flex-col justify-evenly text-center  animate-fade-in-down"   style="animation-delay: 0.3s;">
           <h1 class="text-2xl font-bold">Latest Answers</h1>
           <div>
             <a href="" v-for="answer in data.latestAnswers" :key="answer.id">

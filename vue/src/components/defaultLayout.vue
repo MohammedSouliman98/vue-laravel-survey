@@ -12,18 +12,19 @@
     </nav>
 
     <router-view></router-view>
-    
+    <Notification></Notification> 
   </div>
 </template>
 
 <script>
 import {useStore} from 'vuex';
 import {RouterLink, useRouter} from 'vue-router';
-import Dashboard from '../views/Dashboard.vue';
-import Survey from '../views/Survey.vue';
+import Notification from './Notification.vue';
 export default {
   name: 'DefaultLayout',
-
+  components: {
+    Notification
+  },
   setup(){
     const store = useStore();
     const router = useRouter();

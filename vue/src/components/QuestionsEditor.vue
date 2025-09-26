@@ -56,7 +56,7 @@
       placeholder="Description (optional)"
     >
     </textarea>
-    <div v-if="checkifhasoptions()" class="mt-5">
+    <div  v-if="checkifhasoptions()" class="mt-5 animate-fade-in-down">
       <div class="flex justify-between ">
         <label for="option" class="font-bold text-xl">options</label>
         <button
@@ -70,7 +70,7 @@
         <div class="font-bold text-2xl">this is no potions here</div>
       </div>
       <div v-else>
-        <div v-for="(option , index) in model.data.options" :key="option.uuid" class="flex justify-between m-2">
+        <div v-for="(option , index) in model.data.options" :key="option.uuid" class="flex justify-between m-2 animate-fade-in-down">
           <input
             type="text"
             v-model="option.text"

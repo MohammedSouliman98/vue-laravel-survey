@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1 v-if="loadingsurvey" class="text-center font-bold text-2xl">...Loading</h1>
-  <pagecomponent v-else class="lg:w-[60%] lg:mx-auto">
+  <pagecomponent v-else class="lg:w-[60%] lg:mx-auto animate-fade-in-down">
     <template v-slot:header>
       <h1 class="font-bold text-2xl">
         {{ route.params.id ? model.title : "Create A New Survey" }}
@@ -18,7 +18,7 @@
             :src="model.image"
             alt=""
             id="image"
-            class="w-32 h-32 rounded-full bg-red-500 object-cover"
+            class="w-32 h-32 rounded-full  object-cover"
           />
           <div
             class="w-32 h-32 rounded-full flex justify-center items-center"
@@ -116,9 +116,9 @@
         <div
           v-else
           v-for="(question, index) in model.questions"
+          class="animate-fade-in-down"
           :key="question.id"
         >
-        {{ question }}
           <QuestionsEditor
             :question="question"
             :index="index"
@@ -220,11 +220,14 @@ function questionchange(question) {
 }
 
 function SaveSurvey() {
-  console.log(model.value)
   store.dispatch('savesurvey' , model.value).then((data) => {
-    console.log(data)
+    // console.log('savesurvey')
+    store.commit('notify' , {
+      type : 'success',
+      message : 'Survey Was Saved Successfully'
+    });
     route.push({
-      name : "SurveyView" , params : { id : data.data.id  }
+      name : "Surveys"   
     })
   })
 }
@@ -232,6 +235,10 @@ function SaveSurvey() {
 function deletesurvey(){
   if(confirm("Are you sure you want to delete this survey ?")){
     store.dispatch('deletesurvey' , model.value.id).then(() => {
+      store.commit('notify' , {
+      type : "delete",
+      message : 'Survey Was Deleted Successfully'
+    });
       route.push({ name :"Surveys"})
     })
   }

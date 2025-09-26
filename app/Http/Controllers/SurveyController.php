@@ -104,14 +104,18 @@ class SurveyController extends Controller
     {
         $data = $request->validated();
 
-        if($survey->image){
-            $absolutepath = public_path($survey->image);
-            File::delete($absolutepath);
-        }
+        
+        
         
         if(isset($data['image'])){
             $relativepath = $this->saveImage($data['image']);
+            if($relativepath){
+            if($survey->image){
+            $absolutepath = public_path($survey->image);
+            File::delete($absolutepath);
+                }
             $data['image'] = $relativepath;
+            }
         }
         
         // var_dump($relativepath);
@@ -144,7 +148,8 @@ class SurveyController extends Controller
             }
         }
 
-        return new Surveyresource($survey);
+        // return new Surveyresource($survey);
+        return $data;
     }
 
     /**
@@ -207,20 +212,23 @@ class SurveyController extends Controller
             if ($image === false) {
                 throw new Exception('base64_decode failed');
             }
-        } else {
-            throw new Exception('data did not match');
+        } 
+        // else {
+        //     throw new Exception('data did not match');
+        // }
+
+        if($type){
+            $dir = "images/";
+            $file = Str::random() . "." . $type;
+            $absolutepath = public_path($dir);
+            $relativepath = $dir . $file;
+
+
+            if (!File::exists($absolutepath)) {
+                File::makeDirectory($absolutepath, 0755, true);
+            }
+            file_put_contents($relativepath, $image);
+            return $relativepath;
         }
-
-        $dir = "images/";
-        $file = Str::random() . "." . $type;
-        $absolutepath = public_path($dir);
-        $relativepath = $dir . $file;
-
-
-        if (!File::exists($absolutepath)) {
-            File::makeDirectory($absolutepath, 0755, true);
-        }
-        file_put_contents($relativepath, $image);
-        return $relativepath;
     }
 }

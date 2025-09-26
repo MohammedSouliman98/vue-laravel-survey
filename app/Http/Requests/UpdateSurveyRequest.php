@@ -34,7 +34,7 @@ class UpdateSurveyRequest extends FormRequest
             'image' => 'string|nullable',
             'user_id' => 'required|exists:users,id',
             'status' => 'required|boolean',
-            'expire_at' => 'nullable|date',
+            'expire_at' => 'nullable',
             'questions' => 'array',
          ];
     }
