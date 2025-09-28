@@ -118,7 +118,11 @@ const store = createStore({
             loading : false,
             data : {}
         },
-        surveys: [],
+        surveys: {
+            loading : false , 
+            data : []
+        },
+        links : [],
         typequestion: ["text", "select", "checkbox", "radio", "textarea"],
         Notification : {
             showing : false,
@@ -131,10 +135,14 @@ const store = createStore({
         deletesurvey({commit} , id){
             return axiosClient.delete(`/survey/${id}`);
         },
-        fetchsurveys({ commit }) {
-            return axiosClient.get("/survey").then((res) => {
+        fetchsurveys({ commit } , { url = null } = {}) {
+            commit('setsurveysloading' , true);
+            url = url || '/survey';
+            return axiosClient.get(`${url}`).then((res) => {
                 // console.log(res.data);
                 commit("setSurveys", res.data);
+                commit("setlinks" , res.data);
+                commit('setsurveysloading' , false);
                 return res;
             });
         },
@@ -208,6 +216,9 @@ const store = createStore({
         },
     },
     mutations: {
+        setsurveysloading: (state , loading)=> {
+            state.surveys.loading = loading;
+        },
         setDashboardloading: (state , loading) =>{
             state.Dashboard.loading = loading;
         },
@@ -221,13 +232,16 @@ const store = createStore({
             state.currentsurvey.data = survey.data ;
         },
         addsurvey : (state , survey) => {
-            state.surveys = [ ...state.surveys , survey.data]; 
+            state.surveys.data = [ ...state.surveys.data , survey.data]; 
         },
         setSurveys: (state , surveys) => {
-            state.surveys = surveys.data;
+            state.surveys.data = surveys.data;
+        },
+        setlinks : (state , surveys) => {
+            state.links = surveys.meta.links;
         },
         updatesurvey : (state , survey) =>{ 
-            state.surveys = state.surveys.map(s => {
+            state.surveys.data = state.surveys.data.map(s => {
                 if( s.id === survey.data.id){
                     // console.log(survey.data);
                     return survey.data;

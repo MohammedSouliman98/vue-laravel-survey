@@ -3,7 +3,7 @@
     <nav class="bg-blue-500 text-white p-4 flex justify-between items-center">
       <div class="text-lg font-bold">Dashboard</div>
       <ul class="w-1/4 flex justify-between space-x-4">
-        <li><router-link :to="{name : 'Dashboard'}" class="hover:underline">Home</router-link></li>
+        <li><router-link :to="{name : 'Dashboard'}" class="hover:underline">Dashboard</router-link></li>
         <li><RouterLink :to="{name : 'Surveys'}" class="hover:underline">surveys</RouterLink></li>
       </ul>
       <button @click="logout" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">

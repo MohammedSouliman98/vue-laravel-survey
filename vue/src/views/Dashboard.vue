@@ -8,7 +8,7 @@
       <div v-else class="grid gird-cols-1 md:grid-cols-2 gap-3 lg:grid-cols-3 h-100 ">
         <div class="shadow-md hover:shadow-2xl rounded-xl p-2 flex flex-col justify-evenly px-3 animate-fade-in-down" style="animation-delay: 0.1s;">
           <h1 class="text-2xl font-bold ">Latest Survey</h1>
-          <img src="" class="h-[30%]" alt="">
+          <img :src="data.latestSurvey.image" class="min-h-[50%]" alt="">
           <h1 class="text-xl font-medium">{{ data.latestSurvey.title }}</h1>
           <div class="flex justify-between">
             <span class="py-2">status : </span>
@@ -68,7 +68,6 @@ import Pagecomponent from "../components/pagecomponent.vue";
 
 const loading = computed(()=> store.state.Dashboard.loading);
 const data = computed(()=> store.state.Dashboard.data) ;
-
 
 
 store.dispatch('getDashboardDate')

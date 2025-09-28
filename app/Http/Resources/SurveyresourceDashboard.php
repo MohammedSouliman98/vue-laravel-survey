@@ -6,6 +6,7 @@ use App\Models\Survey;
 use App\Models\SurveyQuestion;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\URL;
 
 class SurveyresourceDashboard extends JsonResource
 {
@@ -20,6 +21,7 @@ class SurveyresourceDashboard extends JsonResource
             'id' => $this->id,
             'title' => $this->title, 
             'slug'  => $this->slug,  
+            'image' =>  Url::to($this->image),
             'status' => $this->status !== 'draft',
             'expire_at' => $this->expire_at,
             'created_at' => $this->created_at,
